@@ -11,9 +11,11 @@ import SwiftUI
 @Observable
 public class FirebaseStorageFolder {
     
+    let storage: Storage
     let path: String
     
-    public init(path: String) {
+    public init(storage: Storage = Storage.storage(), path: String) {
+        self.storage = storage
         self.path = path
     }
     
@@ -23,7 +25,7 @@ public class FirebaseStorageFolder {
     }
     
     public func upload(datas: [Data]) async throws -> [String] {
-        let reference = Storage.storage().reference().child(path)
+        let reference = storage.reference().child(path)
         return try await withThrowingTaskGroup(of: String.self) { group in
             var urlStrings = [String]()
             for (index, data) in datas.enumerated() {
