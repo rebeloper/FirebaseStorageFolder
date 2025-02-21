@@ -11,14 +11,14 @@ import PhotosUI
 public struct ImagePicker<Label: View>: View {
     
     @State private var selectedItems = [PhotosPickerItem]()
-    @State private var selectedImages = [Image]()
+    @State private var selectedImages = [UIImage]()
     
     var maxSelectionCount: Int?
     var selectionBehavior: PhotosPickerSelectionBehavior
     var matching: PHPickerFilter?
-    @ViewBuilder var label: @Sendable ([Image]) -> Label
+    @ViewBuilder var label: @Sendable ([UIImage]) -> Label
     
-    public init(maxSelectionCount: Int? = nil, selectionBehavior: PhotosPickerSelectionBehavior = .default, matching: PHPickerFilter? = .images, @ViewBuilder label: @Sendable @escaping ([Image]) -> Label) {
+    public init(maxSelectionCount: Int? = nil, selectionBehavior: PhotosPickerSelectionBehavior = .default, matching: PHPickerFilter? = .images, @ViewBuilder label: @Sendable @escaping ([UIImage]) -> Label) {
         self.maxSelectionCount = maxSelectionCount
         self.selectionBehavior = selectionBehavior
         self.matching = matching
@@ -34,7 +34,7 @@ public struct ImagePicker<Label: View>: View {
                 var selectedImages = [Image]()
                 for item in selectedItems {
                     if let data = try? await item.loadTransferable(type: Data.self), let uiImage = UIImage(data: data) {
-                        selectedImages.append(Image(uiImage: uiImage))
+                        selectedImages.append(uiImage)
                     }
                 }
                 self.selectedImages = selectedImages
