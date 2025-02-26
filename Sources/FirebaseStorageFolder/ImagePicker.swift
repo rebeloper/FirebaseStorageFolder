@@ -31,7 +31,7 @@ public struct ImagePicker<Label: View>: View {
         }
         .onChange(of: selectedItems) {
             Task {
-                var selectedImages = [Image]()
+                var selectedImages = [UIImage]()
                 for item in selectedItems {
                     if let data = try? await item.loadTransferable(type: Data.self), let uiImage = UIImage(data: data) {
                         selectedImages.append(uiImage)
