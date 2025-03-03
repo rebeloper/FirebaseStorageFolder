@@ -18,7 +18,7 @@ public struct ImagePicker<Label: View>: View {
     var matching: PHPickerFilter?
     @ViewBuilder var label: () -> Label
     
-    public init(selectedImages: Binding<[UIImage]>, maxSelectionCount: Int? = nil, selectionBehavior: PhotosPickerSelectionBehavior = .default, matching: PHPickerFilter? = .images, @ViewBuilder label: @escaping () -> Label) {
+    public init(selectedImages: Binding<[UIImage]>, maxSelectionCount: Int? = 1, selectionBehavior: PhotosPickerSelectionBehavior = .default, matching: PHPickerFilter? = .images, @ViewBuilder label: @escaping () -> Label) {
         self._selectedImages = selectedImages
         self.maxSelectionCount = maxSelectionCount
         self.selectionBehavior = selectionBehavior
@@ -27,7 +27,7 @@ public struct ImagePicker<Label: View>: View {
     }
     
     public var body: some View {
-        PhotosPicker(selection: $selectedItems, maxSelectionCount: 1, selectionBehavior: selectionBehavior, matching: matching) {
+        PhotosPicker(selection: $selectedItems, maxSelectionCount: maxSelectionCount, selectionBehavior: selectionBehavior, matching: matching) {
             label()
         }
         .onChange(of: selectedItems) {
