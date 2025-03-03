@@ -72,5 +72,25 @@ public class FirebaseStorageFolder {
         }
         return try await upload(datas: imagesData)
     }
+    
+    public func delete(at url: String) async throws {
+        try await storage.reference(forURL: url).delete()
+    }
+    
+    public func handleImageChange(_ newImage: UIImage, compressionType: ImageCompressionType = .jpeg(compressionQuality: 0.8), oldImageUrl: String) async throws -> String? {
+        guard oldImageUrl.contains("https") else {
+            return try await upload(image: newImage, compressionType: compressionType)
+        }
+        try await delete(at: oldImageUrl)
+        return try await upload(image: newImage, compressionType: compressionType)
+    }
+    
+    public func handleDataChange(_ newData: Data, oldDataUrl: String) async throws -> String? {
+        guard oldDataUrl.contains("https") else {
+            return try await upload(data: newData)
+        }
+        try await delete(at: oldDataUrl)
+        return try await upload(data: newData)
+    }
 }
 
