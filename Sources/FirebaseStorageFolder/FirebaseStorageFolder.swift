@@ -28,10 +28,11 @@ public class FirebaseStorageFolder {
         let reference = storage.reference().child(path)
         return try await withThrowingTaskGroup(of: String.self) { group in
             var urlStrings = [String]()
-            for (index, data) in datas.enumerated() {
+            for (_, data) in datas.enumerated() {
                 group.addTask(priority: .background) {
-                    let _ = try await reference.child("\(index)").putDataAsync(data)
-                    return try await reference.child("\(index)").downloadURL().absoluteString
+                    let fileName = UUID().uuidString
+                    let _ = try await reference.child(fileName).putDataAsync(data)
+                    return try await reference.child(fileName).downloadURL().absoluteString
                 }
             }
             for try await uploadedDataString in group {
@@ -75,22 +76,6 @@ public class FirebaseStorageFolder {
     
     public func delete(at url: String) async throws {
         try await storage.reference(forURL: url).delete()
-    }
-    
-    public func handleImageChange(_ newImage: UIImage, compressionType: ImageCompressionType = .jpeg(compressionQuality: 0.8), oldImageUrl: String) async throws -> String? {
-        guard oldImageUrl.contains("https") else {
-            return try await upload(image: newImage, compressionType: compressionType)
-        }
-        try await delete(at: oldImageUrl)
-        return try await upload(image: newImage, compressionType: compressionType)
-    }
-    
-    public func handleDataChange(_ newData: Data, oldDataUrl: String) async throws -> String? {
-        guard oldDataUrl.contains("https") else {
-            return try await upload(data: newData)
-        }
-        try await delete(at: oldDataUrl)
-        return try await upload(data: newData)
     }
 }
 
