@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-@preconcurrency import FirebaseStorage
+import FirebaseStorage
 
 @Observable
 public class FirebaseStorageFolder {
