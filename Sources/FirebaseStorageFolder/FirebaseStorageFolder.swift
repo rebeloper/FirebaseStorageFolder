@@ -8,6 +8,7 @@
 import SwiftUI
 import FirebaseStorage
 
+@MainActor
 @Observable
 public class FirebaseStorageFolder {
     
